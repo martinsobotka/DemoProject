@@ -1,0 +1,43 @@
+apply plugin: 'eclipse'
+
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'checkstyle'
+	apply plugin: 'eclipse'
+	
+	group = 'at.jrz.demo'
+	version = '1.0'
+	
+	repositories {
+		mavenCentral()
+	}
+
+	dependencies {
+		testCompile 'junit:junit:4.+'
+	}
+	
+	checkstyle {
+		configFile = new File(rootDir, "config/checkstyle.xml");
+	}
+}
+
+project(':base') {
+    dependencies {
+        compile 'javax:javaee-api:7.+'
+    }
+}
+
+project(':client') {
+    dependencies {
+        compile project(':base')
+		compile 'org.apache.cxf:cxf-bundle-jaxrs:2.+'
+    }
+}
+
+project(':server') {
+	apply plugin: 'war'
+    dependencies {
+        compile project(':base')
+		compile 'javax:javaee-web-api:7.+'
+    }
+}
